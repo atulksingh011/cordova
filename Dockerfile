@@ -53,8 +53,8 @@ RUN apt-get update && apt-get install -y curl gnupg2 lsb-release && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENV CORDOVA_VERSION=12 \
-    CORDOVA_BUILD_TOOLS_VERSION=33.0.2
+ENV CORDOVA_VERSION=11 \
+    CORDOVA_BUILD_TOOLS_VERSION=32
 
 WORKDIR "/tmp"
 
@@ -65,7 +65,7 @@ RUN while true; do echo 'y'; sleep 2; done | sdkmanager "build-tools;${CORDOVA_B
     cordova create myApp com.myCompany.myApp myApp && \
     cd myApp && \
     cordova plugin add cordova-plugin-camera --save && \
-    cordova platform add android@12 --save && \
+    cordova platform add android@11 --save && \
     cordova requirements android && \
     cordova build android --verbose && \
     rm -rf /tmp/myApp && \

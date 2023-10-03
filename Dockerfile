@@ -1,12 +1,4 @@
-FROM beevelop/base
-
-RUN apt-get update && \
-    apt-get -y install openjdk-8-jdk-headless && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    java -version
-
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+FROM beevelop/java
 
 # https://developer.android.com/studio/#downloads
 ENV ANDROID_SDK_URL="https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip" \
@@ -14,7 +6,8 @@ ENV ANDROID_SDK_URL="https://dl.google.com/android/repository/commandlinetools-l
     ANT_HOME="/usr/share/ant" \
     MAVEN_HOME="/usr/share/maven" \
     GRADLE_HOME="/usr/share/gradle" \
-    ANDROID_SDK_ROOT="/opt/android"
+    ANDROID_SDK_ROOT="/opt/android" \
+    ANDROID_HOME="/opt/android"
 
 ENV PATH $PATH:$ANDROID_SDK_ROOT/cmdline-tools/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/build-tools/$ANDROID_BUILD_TOOLS_VERSION:$ANT_HOME/bin:$MAVEN_HOME/bin:$GRADLE_HOME/bin
 
@@ -36,13 +29,24 @@ RUN mkdir /root/.android && touch /root/.android/repositories.cfg && \
     while true; do echo 'y'; sleep 2; done | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "extras;android;m2repository" "extras;google;google_play_services" "extras;google;instantapps" "extras;google;m2repository" &&  \
     while true; do echo 'y'; sleep 2; done | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "add-ons;addon-google_apis-google-22" "add-ons;addon-google_apis-google-23" "add-ons;addon-google_apis-google-24" "skiaparser;1"
 
-RUN chmod a+x -R $ANDROID_SDK_ROOT && \
-    chown -R root:root $ANDROID_SDK_ROOT && \
+RUN echo "Setting permissions and ownership for Android SDK" && \
+    find "$ANDROID_SDK_ROOT" -type d -exec chmod a+x {} + -exec chown root:root {} + && \
+    find "$ANDROID_SDK_ROOT" -type f -exec chmod a+x {} + -exec chown root:root {} + && \
+    echo "Removing Android licenses" && \
     rm -rf /opt/android/licenses && \
+    echo "Cleaning up package lists and temporary files" && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     apt-get autoremove -y && \
     apt-get clean && \
-    mvn -v && gradle -v && java -version && ant -version
+    echo "Checking Maven version" && \
+    mvn -v && \
+    echo "Checking Gradle version" && \
+    gradle -v && \
+    echo "Checking Java version" && \
+    java -version && \
+    echo "Checking Ant version" && \
+    ant -version
+
 
 RUN apt-get update && apt-get install -y curl gnupg2 lsb-release && \
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
@@ -58,7 +62,8 @@ RUN apt-get update && apt-get install -y curl gnupg2 lsb-release && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENV CORDOVA_VERSION 11.0.0
+ENV CORDOVA_VERSION=11.0.0 \
+    ANDROID_HOME="/opt/android"
 
 WORKDIR "/tmp"
 
@@ -68,7 +73,7 @@ RUN npm i -g --unsafe-perm cordova@${CORDOVA_VERSION} && \
     cordova create myApp com.myCompany.myApp myApp && \
     cd myApp && \
     cordova plugin add cordova-plugin-camera --save && \
-    cordova platform add android --save && \
+    cordova platform add android@${CORDOVA_VERSION} --save && \
     cordova requirements android && \
     cordova build android --verbose && \
     rm -rf /tmp/myApp

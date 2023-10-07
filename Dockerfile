@@ -31,14 +31,24 @@ RUN mkdir /root/.android && touch /root/.android/repositories.cfg && \
     while true; do echo 'y'; sleep 2; done | sdkmanager "extras;android;m2repository" "extras;google;google_play_services" "extras;google;instantapps" "extras;google;m2repository" &&  \
     while true; do echo 'y'; sleep 2; done | sdkmanager "add-ons;addon-google_apis-google-22" "add-ons;addon-google_apis-google-23" "add-ons;addon-google_apis-google-24" "skiaparser;1" "skiaparser;2" "skiaparser;3"
 
-RUN chmod a+x -R $ANDROID_SDK_ROOT && \
-    chown -R root:root $ANDROID_SDK_ROOT && \
+RUN echo "Setting permissions and ownership for Android SDK" && \
+    find "$ANDROID_SDK_ROOT" -type d -exec chmod a+x {} + -exec chown root:root {} + && \
+    find "$ANDROID_SDK_ROOT" -type f -exec chmod a+x {} + -exec chown root:root {} + && \
+    echo "Removing Android licenses" && \
     rm -rf /opt/android/licenses && \
+    echo "Cleaning up package lists and temporary files" && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     apt-get autoremove -y && \
     apt-get clean && \
-    mvn -v && gradle -v && java -version && ant -version
-
+    echo "Checking Maven version" && \
+    mvn -v && \
+    echo "Checking Gradle version" && \
+    gradle -v && \
+    echo "Checking Java version" && \
+    java -version && \
+    echo "Checking Ant version" && \
+    ant -version
+    
 RUN apt-get update && apt-get install -y curl gnupg2 lsb-release && \
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
     apt-key fingerprint 1655A0AB68576280 && \

@@ -62,7 +62,7 @@ RUN apt-get update && apt-get install -y curl gnupg2 lsb-release && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENV CORDOVA_VERSION=11.0.0 \
+ENV CORDOVA_VERSION=11.1.0 \
     ANDROID_HOME="/opt/android"
 
 WORKDIR "/tmp"
@@ -73,7 +73,7 @@ RUN npm i -g --unsafe-perm cordova@${CORDOVA_VERSION} && \
     cordova create myApp com.myCompany.myApp myApp && \
     cd myApp && \
     cordova plugin add cordova-plugin-camera --save && \
-    cordova platform add android@${CORDOVA_VERSION} --save && \
+    cordova platform add android@11 --save && \
     cordova requirements android && \
     cordova build android --verbose && \
     rm -rf /tmp/myApp

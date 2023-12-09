@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.mypin" version="2.0.16" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>MyPin</name>
+    <description>
+        Join the intelligent and simplest way to automate your business. It's secure, ad free and completely private.
+    </description>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <allow-navigation href="http://*/*" />
+    <platform name="android">
+        <!-- <allow-intent href="market:*" /> -->
+        <!-- <edit-config file="AndroidManifest.xml" target="/manifest/application" mode="merge">
+            <application android:requestLegacyExternalStorage="true" />
+            <application android:usesCleartextTraffic="true" />
+        </edit-config> -->
+        <!-- <config-file target="AndroidManifest.xml" parent="/manifest" after="uses-permission">
+            <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+        </config-file> -->
+        <!-- <edit-config file="<filename>" target="<filepath>" parent="/paths">
+            <external-path name="external_files" path="."/>
+            <external-files-path name="external-files-path" path="." />
+        </edit-config> -->
+    </platform>
+    <icon density="mdpi" height="41" src="www/assets/images/my-pin-logo.png" width="87" />
+    <!-- <preference name="AndroidXEnabled" value="true" /> -->
+    <!-- <preference name="android-targetSdkVersion" value="29" /> -->
+    <preference name="loadUrlTimeoutValue" value="700000" />
+    <preference name="AndroidLaunchMode" value="singleTop" />
+    <hook src="hooks/beforePrepare.js" type="before_prepare" />
+    <!-- <hook src="hooks/incrementBuildNum.js" type="before_prepare"/> -->
+</widget>

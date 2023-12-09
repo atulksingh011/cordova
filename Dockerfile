@@ -1,4 +1,4 @@
-FROM jackavins/mypin:latest
+FROM jackavins/cordova:cordova-11
 
 WORKDIR /tmp/app
 

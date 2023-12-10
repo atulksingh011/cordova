@@ -1,0 +1,12 @@
+{
+    "android": {
+        "release": {
+            "keystore": "./PlayStore/mypin.pepk",
+            "storePassword": "mypin@123",
+            "alias": "mypin",
+            "password" : "mypin@123",
+            "keystoreType": "",
+            "packageType": "bundle"
+        }
+    }
+}

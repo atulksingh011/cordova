@@ -3,5 +3,7 @@
 ### Or build from GitHub
 
 ```bash
-docker build -t mypin-cordova github.com/jackavins/cordova
+./build.sh # to build debug apk
+
+./release.sh # to build release apk
 ```

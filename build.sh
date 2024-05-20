@@ -5,4 +5,4 @@ docker run --name cordova-build -v "$(pwd)/app/config.xml:/tmp/app/config.xml" -
 docker cp cordova-build:/tmp/app/platforms/android/app/build/outputs/apk/debug/app-debug.apk tmp
 docker container stop cordova-build
 docker container rm cordova-build
-./post-build.sh
+# ./post-build.sh

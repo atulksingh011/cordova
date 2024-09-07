@@ -8,15 +8,18 @@ const port = 4100;
 let isProcessing = false;
 
 // Route to execute the build script and stream logs in HTML format
-app.get('/build', (req, res) => {
+app.get('/build/:commitId?', (req, res) => {
     if (isProcessing) {
         res.status(503).send('Server is busy processing another request. Please try again in 5 min.');
         return;
     }
 
+    const commitId = req.params.commitId;
     isProcessing = true;
 
-    const script = spawn('./build.sh');
+    // Prepare the arguments for spawn
+    const args = commitId ? [commitId] : [];
+    const script = spawn('./build.sh', args);
 
     res.setHeader('Content-Type', 'text/html');
 

@@ -3,6 +3,12 @@
 export NG_CLI_ANALYTICS=ci
 cd ../frontend-old/
 
+# Load NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+nvm use
+
 # Check if a commit hash is passed as an argument
 if [ -n "$1" ]; then
   echo "Checking out commit: $1"
